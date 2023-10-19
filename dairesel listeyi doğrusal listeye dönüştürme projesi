@@ -1,0 +1,97 @@
+#include <iostream>
+#include <locale.h>
+
+#include <ctime>
+#include <stdlib.h>
+using namespace std;
+
+struct node
+{
+    int data;
+    node* link;
+};
+
+void donustur(node* list,node* l2)
+{
+	node* ylist=list;
+	if(list!=NULL)
+	{
+	  do
+	  {
+	  	if(list->link==ylist)
+	  	{
+	  		l2->link=NULL;
+	  		cout<<"LİSTENİZ DOGRUSAL LİSTEYE DONUSTURULMUSTUR."<<endl;
+	  		 do 
+            {
+           
+         	 cout << "Listenin " << "3" << ".Nodunun Adresi= " << list
+             << " Datasi= " << list->data
+             << " Linki= " << list->link << endl;
+             list = list->link;
+	         }while(ylist!=list);
+		  }
+
+	  	list=list->link;
+	  }while(ylist!=list);
+	  
+	}
+}
+
+
+void dumplist(node* list)
+{
+	node* ylist=list;   
+    	int i = 1;
+    do 
+    {
+   
+    	 cout << "Listenin " << i++ << ".Nodunun Adresi= " << list
+             << " Datasi= " << list->data
+             << " Linki= " << list->link << endl;
+        list = list->link;
+	}while(ylist!=list);
+}
+
+
+node* newnode()
+{
+    node* newnode = new node;
+    newnode->link = NULL;
+    return(newnode);
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "Turkish");
+	int secim;
+	cout<<"1-) list listesini ekrana listele "<<endl;
+	
+
+  cout<<"yapmak istediğiniz işlemi giriniz:";
+  cin>>secim;
+	
+    
+    
+    node* list = new node(); // bellekten tahsis
+    node* l1 = new node(); // bellekten tahsis
+    node* l2 = new node(); // bellekten tahsis
+    
+    
+    srand(time(NULL));
+
+    list->data = 8;
+    list->link = l1;
+    l1->data = 4;
+    l1->link = l2;
+    l2->data = 7;
+   l2->link=list;
+    
+    
+ dumplist(list);
+ donustur(list,l2);
+ 
+    system("pause");
+    return 0;
+}
