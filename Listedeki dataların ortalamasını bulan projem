@@ -1,0 +1,55 @@
+#include <iostream>
+#include <locale.h>
+#include <ctime>
+#include <stdlib.h>
+using namespace std;
+
+
+
+struct node
+{
+int data;
+node* link;
+};
+
+node* newnode()
+{
+node* newnode=new node;
+newnode->link=NULL;
+return(newnode);
+}
+
+int ortalamaBul(node* list)
+{
+if(list == NULL)
+{
+	return 0;
+}
+
+else
+{
+ int toplam = list->data + ortalamaBul(list->link );
+ int elemanSayisi = 1 + ortalamaBul(list->link);
+ return toplam / elemanSayisi;	
+}
+}
+
+int main()
+{
+node* list = new node();
+node* l1 = new node();
+node* l2 = new node();
+
+list->data=18;
+list->link=l1;
+l1->data=1;
+l1->link=l2;
+l2->data=8;
+l2->link=NULL;
+  
+  cout<<"Listedeki Datalarin ortalamasi:"<<ortalamaBul(list)<<endl;
+
+ system("pause");
+ return 0;
+
+}
