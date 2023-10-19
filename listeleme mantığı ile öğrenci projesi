@@ -1,0 +1,191 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+struct Ogrenci {
+    std::string ad;
+    std::string soyad;
+    std::string sinif;
+    std::string dogum_tarihi;
+    std::string veli_telefon;
+    Ogrenci* next;
+};
+
+class BagliDogrusalListe {
+public:
+    Ogrenci* bas;
+
+    BagliDogrusalListe() : bas(NULL) {}
+
+    void ogrenciEkle(Ogrenci* ogrenci) {
+        if (bas == NULL) {
+            bas = ogrenci;
+        }
+        else {
+            Ogrenci* current = bas;
+            while (current->next != NULL) {
+                current = current->next;
+            }
+            current->next = ogrenci;
+        }
+    }
+
+    void ogrenciListele() {
+        if (bas == NULL) {
+            std::cout << "Listede kayıtlı öğrenci bulunmamaktadır." << std::endl;
+        }
+        else {
+            Ogrenci* current = bas;
+            while (current != NULL) {
+                std::cout << "Adi Soyadi: " << current->ad << " " << current->soyad << std::endl;
+                std::cout << "Sinifi: " << current->sinif << std::endl;
+                std::cout << "Dogum Tarihi: " << current->dogum_tarihi << std::endl;
+                std::cout << "Veli Telefonu: " << current->veli_telefon << std::endl;
+                std::cout << "----------------------------" << std::endl;
+                current = current->next;
+            }
+        }
+    }
+
+    void listeDiskKaydet() {
+        std::ofstream dosya("ogrenci_verileri.bin", std::ios::binary);
+        if (dosya.is_open()) {
+            Ogrenci* current = bas;
+            while (current != NULL) {
+                dosya << current->ad << std::endl;
+                dosya << current->soyad << std::endl;
+                dosya << current->sinif << std::endl;
+                dosya << current->dogum_tarihi << std::endl;
+                dosya << current->veli_telefon << std::endl;
+                current = current->next;
+            }
+            dosya.close();
+            std::cout << "Öğrenci verileri disk dosyasina kaydedildi." << std::endl;
+        }
+        else {
+            std::cout << "Disk dosyasi acilamadi." << std::endl;
+        }
+    }
+
+    void listeDisktenYukle() {
+        std::ifstream dosya("ogrenci_verileri.bin", std::ios::binary);
+        if (dosya.is_open()) {
+            Ogrenci* current = NULL;
+            Ogrenci* prev = NULL;
+            std::string line;
+            while (getline(dosya, line)) {
+                current = new Ogrenci;
+                current->ad = line;
+                getline(dosya, current->soyad);
+                getline(dosya, current->sinif);
+                getline(dosya, current->dogum_tarihi);
+                getline(dosya, current->veli_telefon);
+                current->next = NULL;
+                if (prev != NULL) {
+                    prev->next = current;
+                }
+                else {
+                    bas = current;
+                }
+                prev = current;
+            }
+            dosya.close();
+            std::cout << "Öğrenci verileri diskten yüklendi." << std::endl;
+        }
+        else {
+            std::cout << "Disk dosyasi açılamadı." << std::endl;
+        }
+    }
+};
+
+void ekle(BagliDogrusalListe& liste) {
+    Ogrenci* yeniOgrenci = new Ogrenci;
+
+    std::cout << "ogrenci adi: ";
+    std::cin.ignore();
+    getline(std::cin, yeniOgrenci->ad);
+
+    std::cout << "ogrenci soyadi: ";
+    getline(std::cin, yeniOgrenci->soyad);
+
+    std::cout << "ogrenci sinifi: ";
+    getline(std::cin, yeniOgrenci->sinif);
+
+    std::cout << "ogrenci dogum tarihi: ";
+    getline(std::cin, yeniOgrenci->dogum_tarihi);
+
+    std::cout << "Veli telefon numarasi: ";
+    getline(std::cin, yeniOgrenci->veli_telefon);
+
+    yeniOgrenci->next = NULL;
+
+    liste.ogrenciEkle(yeniOgrenci);
+}
+
+void tumListe(BagliDogrusalListe& liste) {
+    liste.ogrenciListele();
+}
+
+void sinifListele(BagliDogrusalListe& liste) {
+    std::string sinifAdi;
+    std::cout << "Sinif Adi: ";
+    std::cin.ignore();
+    getline(std::cin, sinifAdi);
+
+    Ogrenci* current = liste.bas;
+    bool sinifBulundu = false;
+    while (current != NULL) {
+        if (current->sinif == sinifAdi) {
+            std::cout << "Adi Soyadi: " << current->ad << " " << current->soyad << std::endl;
+            std::cout << "Sinifi: " << current->sinif << std::endl;
+            std::cout << "Dogum Tarihi: " << current->dogum_tarihi << std::endl;
+            std::cout << "Veli Telefonu: " << current->veli_telefon << std::endl;
+            std::cout << "----------------------------" << std::endl;
+            sinifBulundu = true;
+        }
+        current = current->next;
+    }
+
+    if (!sinifBulundu) {
+        std::cout << "Belirtilen sinif adina sahip ogrenci bulunamadi." << std::endl;
+    }
+}
+
+int main() {
+    BagliDogrusalListe liste;
+    liste.listeDisktenYukle();
+
+    int secim;
+    do {
+        std::cout << "1. Yeni ogrenci ekle" << std::endl;
+        std::cout << "2. Tum ogrencileri listele" << std::endl;
+        std::cout << "3. Sinifa gore ogrencileri listele" << std::endl;
+        std::cout << "4. Listeyi diske kaydet" << std::endl;
+        std::cout << "0. Cikis" << std::endl;
+        std::cout << "Secim: ";
+        std::cin >> secim;
+
+        switch (secim) {
+            case 1:
+                ekle(liste);
+                break;
+            case 2:
+                tumListe(liste);
+                break;
+            case 3:
+                sinifListele(liste);
+                break;
+            case 4:
+                liste.listeDiskKaydet();
+                break;
+            case 0:
+                std::cout << "Tutunun! programdan cikiliyor..." << std::endl;
+                break;
+            default:
+                std::cout << "Gecersiz seçim girdiniz. Lutfen Tekrar Deneyiniz!" << std::endl;
+                break;
+        }
+    } while (secim != 0);
+
+    return 0;
+}
