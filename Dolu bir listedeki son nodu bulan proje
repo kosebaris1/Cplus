@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+
+struct node
+{
+int data;
+node* link;
+};
+
+node* newnode()
+{
+node* newnode=new node;
+newnode->link=NULL;
+return(newnode);
+}
+
+node* last(node* list)
+{
+if(list->link==NULL)
+return list;
+else
+return last(list->link);
+}
+
+int main()
+{
+node* list = new node();
+node* l1 = new node();
+node* l2 = new node();
+
+list->data=12;
+list->link=l1;
+l1->data=5;
+l1->link=l2;
+l2->data=23;
+l2->link=NULL;
+
+node* last_node=last(list);
+
+cout<<"listenin son nodu:"<<last_node->data<<endl;
+
+ system("pause");
+ return 0;
+
+}
