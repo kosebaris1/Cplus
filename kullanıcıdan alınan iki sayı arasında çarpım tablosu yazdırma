@@ -1,0 +1,26 @@
+#include <iostream>
+#include <locale.h> // DİL KUTUPHANESİ
+
+using namespace std;
+
+int main()
+{
+setlocale(LC_ALL,"Turkish");
+
+int kSayi,bSayi;
+cout<<"kucuk sayiyi giriniz:";
+cin>>kSayi;
+cout<<"buyuk sayi giriniz:";
+cin>>bSayi;
+while(bSayi>=kSayi)
+{
+  cout<<kSayi<<"x 7=" << (7*kSayi)<<endl;
+  kSayi++;	
+	
+	
+}
+
+	system("pause");
+	return 0;
+	
+}
