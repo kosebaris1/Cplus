@@ -1,0 +1,399 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <stdio.h>
+#include <fstream>
+#include  <conio.h>
+#include <string.h>
+#include <iomanip>
+
+using namespace std;
+
+struct Bilgi
+{
+
+	char ad_soyad[15];
+   char adres[20];
+   char teslimalan[14];
+	char g_ad[20];
+	char g_adres[22];
+	char kargonerde[32];
+	char kargo_no[5];
+	
+};
+void KargoEkle();
+void KargoAra();
+void KargoListele();
+void KargoSil();
+void KargoGuncelle();
+int main()
+{
+	setlocale(LC_ALL,"Turkish");
+   
+   char anamenu;
+   
+    
+do 
+{
+  	system("cls");
+   cout<<setw(75)<<"{*******************************}"<<endl;	
+   cout<<setw(75)<<"{                               }"<<endl;	
+   cout<<setw(75)<<"{       1- Kargo ekleme         }"<<endl;//ekleme
+   cout<<setw(75)<<"{       2-kargo arama           }"<<endl;//listeleme
+   cout<<setw(75)<<"{       3-Kargo listeleme       }"<<endl;
+   cout<<setw(75)<<"{       4-Kargo silme           }"<<endl;
+   cout<<setw(75)<<"{       5-Kargo güncelleme      }"<<endl;	
+   cout<<setw(75)<<"{                               }"<<endl;	
+   cout<<setw(75)<<"{*******************************}"<<endl;	
+
+     char secim;
+     	 cout<<"Yapmak istediğiniz İşlemin numarasını giriniz:";
+     cin>>secim;
+     cout<<endl;
+ switch(secim)
+ {
+  	
+  	case '1':
+  	{
+  	KargoEkle();
+  	  	break;
+	}
+  	case '2':
+  	{
+  		KargoAra();
+  		break;
+	 }	
+    case '3':
+    {
+    KargoListele();
+     break;	
+	}
+	case '4':
+	{
+	KargoSil();
+	break;
+	}
+	case '5':
+	{
+     KargoGuncelle();
+     break;
+	}
+ }
+
+  	cout<<"Ana menuye Dönmek istermisiniz (e/h)?";
+  	cin>>anamenu;
+  	
+}while(anamenu=='e' || anamenu=='E' );
+  
+
+
+
+	return 0;
+}
+
+ Bilgi b1;
+
+void KargoEkle()
+{ 
+
+
+    ofstream yaz("Kargo.dat",ios::binary |ios::app);
+     char kayit;
+   do{
+   	
+   	cout<<"KARGO NO GİRİNİZ:";
+    cin>>b1.kargo_no;
+    
+    
+    cout<<"GÖNDERİCİ ADINI GİRİNİZ:";
+    cin>>b1.g_ad;
+    
+  
+    cout<<"GÖNDERİCİ ADRES GİRİNİZ:";
+	cin>>b1.g_adres;
+	
+	cout<<"KARGONUN NERDE OLDUĞUNU GİRİNİZ:";
+	cin>>b1.kargonerde;
+	  
+     cout<<endl;
+  
+  	 cout<<"ALICI AD SOYAD GİRİNİZ:";
+    cin>>b1.ad_soyad;
+    
+	cout<<"ALICININ ADRESİNİ GİRİNİZ:";
+	cin>>b1.adres;
+	
+	cout<<"TESLİM ALAN KİSİ:";
+	cin>>b1.teslimalan;
+	cout<<endl;
+	 	
+	yaz.write((char*)&b1,sizeof(b1));
+  	
+	cout<<"Başka kayıt eklemek istermisiniz (e/h)?";
+   	cin>>kayit;
+   	cout<<endl;
+	
+}while(kayit=='e' || kayit=='E');
+	yaz.close();
+}
+
+void KargoAra()
+{
+	ifstream oku("Kargo.dat",ios::binary|ios::app);
+	oku.seekg(0,ios::end);
+	
+	int kayits=oku.tellg()/sizeof(b1);
+	char kargo_noyeni[5];
+	
+	cout<<"Aramak istediğiniz kargo numarasını giriniz:";
+	cin>>kargo_noyeni;
+	cout<<endl;
+	if(kayits>0)
+	{
+		for(int i=0;i<kayits;i++)
+		{
+				oku.seekg(i*sizeof(b1));
+			oku.read((char*)&b1, sizeof(b1));	
+		if(strcmp(b1.kargo_no,kargo_noyeni)==0)
+		{
+		cout<<"ÇIKIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.g_adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"KARGO NEREDE?="<<b1.kargonerde<<endl;
+		cout<<"GÖDERİCİ ADI:"<<b1.g_ad<<endl;
+		cout<<"GÖDERİCİ ADRES:"<<b1.g_adres<<endl;
+		cout<<"Kargo no:"<<b1.kargo_no<<endl;
+		cout<<"VARIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"ALICI:"<<b1.ad_soyad<<endl;
+		cout<<"ALICI ADRES:"<<b1.adres<<endl;
+		cout<<"TESLİM ALAN KİŞİ:"<<b1.teslimalan<<endl;
+  			cout<<endl;
+		}	
+      }
+  }
+   	else
+	cout<<"Aradığınız kargo numarasını bulunmamaktadır!!!"<<endl;
+		
+	oku.close();
+}
+
+void KargoListele()
+{
+	ifstream oku("Kargo.dat",ios::binary|ios::app);
+	oku.seekg(0,ios::end);
+	int kayits=oku.tellg()/sizeof(b1);
+	
+		 cout<<"Kayıtlı kargo sayısı:"<<kayits<<endl;
+		if(kayits>0)
+	{
+		
+		for(int i=0; i<kayits;i++)
+		{
+		oku.seekg(i*sizeof(b1));
+			oku.read((char*)&b1, sizeof(b1));	
+		
+	
+		 cout<<endl;
+		cout<<"ÇIKIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.g_adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"KARGO NEREDE?="<<b1.kargonerde<<endl;
+		cout<<"GÖDERİCİ ADI:"<<b1.g_ad<<endl;
+		cout<<"GÖDERİCİ ADRES:"<<b1.g_adres<<endl;
+		cout<<"Kargo no:"<<b1.kargo_no<<endl;
+		
+		cout<<endl;
+		cout<<"VARIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"ALICI:"<<b1.ad_soyad<<endl;
+		cout<<"ALICI ADRES:"<<b1.adres<<endl;
+		cout<<"TESLİM ALAN KİŞİ:"<<b1.teslimalan<<endl;
+  			cout<<endl;
+	
+		}
+		
+	}
+	else
+	cout << "Kayit Bulunamadi..-." << endl;
+
+	oku.close();
+}
+
+void KargoSil()
+{
+	 char kargonumara[5];
+     char secim;
+     bool var=false;
+     
+    ifstream oku("Kargo.dat",ios::binary |ios::app);
+	oku.seekg(0,ios::end);
+	int kayitsayisi=oku.tellg()/sizeof(b1);
+	
+     cout<<"Kaydini Sileceginiz Kargo No Giriniz : ";
+     cin>>kargonumara;
+
+     for(int i=0;i<kayitsayisi;i++)
+     {
+            oku.seekg(i*sizeof(b1));
+			oku.read((char*)&b1, sizeof(b1));
+			
+     if(strcmp(b1.kargo_no,kargonumara)==0)
+       {
+                cout<<"ÇIKIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.g_adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"KARGO NEREDE?="<<b1.kargonerde<<endl;
+		cout<<"GÖDERİCİ ADI:"<<b1.g_ad<<endl;
+		cout<<"GÖDERİCİ ADRES:"<<b1.g_adres<<endl;
+		cout<<"Kargo no:"<<b1.kargo_no<<endl;
+		
+		cout<<endl;
+		cout<<"VARIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"ALICI:"<<b1.ad_soyad<<endl;
+		cout<<"ALICI ADRES:"<<b1.adres<<endl;
+		cout<<"TESLİM ALAN KİŞİ:"<<b1.teslimalan<<endl;
+                
+         	 				  
+                cout<<"\n\nSilmek Istediginiz Kayit Bu Mu? [E/H] : ";
+                secim=getche();
+            if(secim == 'H' || secim == 'h')
+              {      
+			
+                ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+                 y_dosya.write((char*)&b1, sizeof(b1));
+                y_dosya.close();
+              }
+            else if(secim=='e'||secim=='E')
+              {
+   			   	var=true;
+  		 	  }
+        }
+             else
+             {
+              
+              ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+               y_dosya.write((char*)&b1, sizeof(b1));
+             
+              y_dosya.close();
+             }
+     }
+    oku.close();
+    if(var)
+    {
+               remove("Kargo.dat");
+               rename("Yedek.dat","Kargo.dat");
+               cout<<"\n Kayit Silindi"<<endl;
+    }
+    else
+    {
+               remove("Yedek.dat");
+               cout<<"\n Kayit Bulunamadi"<<endl;                  
+    }
+}
+void KargoGuncelle()
+{
+	 char kargonumara[5];
+     char secim;
+     bool var=false;
+     
+    ifstream oku("Kargo.dat",ios::binary |ios::app);
+	oku.seekg(0,ios::end);
+	int kayitsayisi=oku.tellg()/sizeof(b1);
+	
+     cout<<"Kaydini Güncelleyeceğiniz Kargo No Giriniz : ";
+     cin>>kargonumara;
+
+     for(int i=0;i<kayitsayisi;i++)
+     {
+            oku.seekg(i*sizeof(b1));
+			oku.read((char*)&b1, sizeof(b1));
+			
+    if(strcmp(b1.kargo_no,kargonumara)==0)
+    {
+                cout<<"ÇIKIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.g_adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"KARGO NEREDE?="<<b1.kargonerde<<endl;
+		cout<<"GÖDERİCİ ADI:"<<b1.g_ad<<endl;
+		cout<<"GÖDERİCİ ADRES:"<<b1.g_adres<<endl;
+		cout<<"Kargo no:"<<b1.kargo_no<<endl;
+		cout<<endl;
+		cout<<"VARIŞ İL/İLÇE:"<<"\t"<<"-"<<b1.adres<<"-"<<endl;
+		cout<<"-----------------------"<<endl;
+		cout<<"ALICI:"<<b1.ad_soyad<<endl;
+		cout<<"ALICI ADRES:"<<b1.adres<<endl;
+		cout<<"TESLİM ALAN KİŞİ:"<<b1.teslimalan<<endl;
+         	 				  
+      cout<<"\n\Güncellemek Istediginiz Kayit Bu Mu? [E/H] : ";
+       secim=getche();
+       cout<<endl;
+     if(secim == 'H' || secim == 'h')
+     {  
+	     
+	ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+    y_dosya.write((char*)&b1, sizeof(b1));
+     y_dosya.close();
+      }
+    else if(secim=='e'||secim=='E')
+    {
+   	var=true;
+    ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+   			   	 
+   	cout<<"KARGO NO GİRİNİZ:";
+    cin>>b1.kargo_no;
+    
+    cout<<"GÖNDERİCİ ADINI GİRİNİZ:";
+    cin>>b1.g_ad;
+    
+    cout<<"GÖNDERİCİ ADRES GİRİNİZ:";
+	cin>>b1.g_adres;
+	
+	cout<<"KARGONUN NERDE OLDUĞUNU GİRİNİZ:";
+	cin>>b1.kargonerde;
+	  
+  cout<<endl;
+  
+  	 cout<<"ALICI AD SOYAD GİRİNİZ:";
+    cin>>b1.ad_soyad;
+    
+
+	cout<<"ALICININ ADRESİNİ GİRİNİZ:";
+	cin>>b1.adres;
+	
+	cout<<"TESLİM ALAN KİSİ:";
+	cin>>b1.teslimalan;
+	
+   			   	  
+    y_dosya.write((char*)&b1, sizeof(b1));
+   	 y_dosya.close();
+  	 }
+}
+     else
+    {
+              
+    ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+    y_dosya.write((char*)&b1, sizeof(b1));
+     y_dosya.close();
+      }
+}
+    oku.close();
+    if(var)
+    {
+               remove("Kargo.dat");
+               rename("Yedek.dat","Kargo.dat");
+               cout<<"\n Kayit Güncellendi"<<endl;
+    }
+    else
+    {
+               remove("Yedek.dat");
+               cout<<"\n Kayit Bulunamadi"<<endl;                  
+    }
+}
+	
+	
+
+
+
+
+
+
+
