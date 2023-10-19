@@ -1,0 +1,36 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	
+	int sayi1;
+	int sayi2;
+	int bolen;
+	
+	cout<<"1. deger araligini giriniz:";
+	cin>>sayi1;
+	
+	cout<<"2. deger araligini giriniz:";
+	cin>>sayi2;
+	
+	cout<<"hangi sayiya bolmek istediginiz sayiyi yaziniz:";
+	cin>>bolen;
+	
+	
+	
+	for(int i=sayi1; i<=sayi2;i++)
+	{
+		
+		if(i%bolen==0)
+		
+		cout<<i<<endl;
+		
+	}
+	
+	
+	system("pause");
+	return 0;
+	
+}
