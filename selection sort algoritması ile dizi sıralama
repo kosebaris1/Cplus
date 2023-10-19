@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+void selectionSort(int arr[], int n) {
+    int x, y, min_idx;
+    for (x = 0; x < n - 1; x++) {
+        min_idx = x;
+        for (y = x + 1; y < n; y++) {
+            if (arr[y] < arr[min_idx]) {
+                min_idx = y;
+            }
+        }
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[x];
+        arr[x] = temp;
+    }
+}
+
+
+int main() {
+    int sayilar[] = {23,34, 25, 11, 25,9,12};
+    int n = sizeof(sayilar) / sizeof(sayilar[0]);
+    selectionSort(sayilar, n);
+    
+    
+    printf("Dizinin sirali son durumu: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", sayilar[i]);
+    }
+    printf("\n");
+    return 0;
+}
