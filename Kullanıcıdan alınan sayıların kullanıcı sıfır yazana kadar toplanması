@@ -1,0 +1,37 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	
+//kullanıcıdan 0 yazıncaya kadar aldıgı
+//sayıların toplamını bulunuz.
+
+
+int toplam=0;
+int a;
+
+for(int i=0; ;)
+{
+	i++;
+	cout<<i<<".sayiyi giriniz"<<endl;
+	cin>>a;
+	if(a==0)
+	{
+		break;	
+	}
+	else
+	toplam+=a;
+		
+}
+	
+ cout<<"toplam:"<<toplam<<endl;	
+	
+		
+	
+	
+	system("pause");
+	return 0;
+	
+}
