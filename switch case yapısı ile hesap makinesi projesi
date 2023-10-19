@@ -1,0 +1,47 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int a,b;
+	char islem;
+	
+	cout<<"1.sayiyi giriniz="<<endl;
+	cin>>a;
+	
+	cout<<"islemi turunu giriniz:"<<endl;
+	cin>>islem;
+	
+	cout<<"2.sayiyi giriniz="<<endl;
+	cin>>b;
+	
+	switch(islem)
+	{
+		case '+':
+		cout<<"toplam:"<<a+b<<endl;
+		break;
+		
+		
+		case '-':
+		cout<<"cikarma:"<<a-b<<endl;
+		break;
+		
+		case '*':
+		   cout<<"carpim:"<<a*b<<endl;
+		   break;
+		   
+		case '/':
+		   cout<<"bolum:"<<a/b<<endl;	
+	     break;
+	           
+	   default:
+	      cout<<"islem turu hatali"<<endl;
+	      break;
+	}
+	
+	
+	system("pause");
+	return 0;
+	
+}
